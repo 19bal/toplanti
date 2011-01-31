@@ -20,7 +20,7 @@ USA}
 \section[İskelet]{}
 \frame{\tableofcontents}
 
-\frame {
+\begin{frame}
 	\frametitle{Özet}
 
 	\begin{itemize}
@@ -33,12 +33,11 @@ USA}
 		\item wavelet öznitelik kombinasyonu ve SVM kullanıldı
 		\item VIVID dataseti kullanılmıştır
 	\end{itemize}
-
-}
+\end{frame}
 
 \section{Giriş}
 
-\frame {
+\begin{frame}
 	\frametitle{UAV}
 
 	\begin{block}{UAV}
@@ -54,9 +53,9 @@ USA}
 		      yapılmıştır: cite{dalal05}, cite{felzenswalb08}, cite{leibe05},
 			  cite{mikolajczyk04} ve cite{sabzmeydani07}
 	\end{itemize}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\frametitle{yerden X gökten}
 
 	\begin{itemize}
@@ -72,9 +71,9 @@ USA}
 			  yüksektir
 		\item "Person Tracking in UAV video" @ cite{xiao07} ve cite{miller07}
 	\end{itemize}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\frametitle {İlgili Makaleler}
 
 	\begin{itemize}
@@ -84,14 +83,13 @@ USA}
 		\item insan durağansa? gölge olduğunda? bloblar birbirine benzer takip
 			  güçleşir
 	\end{itemize}
+\end{frame}
 
-}
-
-\frame {
+\begin{frame}
 	\includegraphics[width=1.0\textwidth]{img/fig8.jpg}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\frametitle {İlgili Makaleler}
 
 	cite{miller07}
@@ -101,9 +99,9 @@ USA}
 		\item daha sonra OT-MATCH filtreden geçirilir
 		\item insanı şekillendiren nokta sayısı çok fazladır
 	\end{itemize}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\frametitle {Makalenin Yaklaşımı}
 
 	\begin{itemize}
@@ -115,36 +113,36 @@ USA}
 			  kısıtlama yaklaşımı
 		\item SVM ile insan veya değil şeklinde sınıflandırılır
 	\end{itemize}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\frametitle{Üstünlükleri}
 
 	\begin{itemize}
 		\item motion detection gereksizdir
 		\item güçlü gölgeler performansı etkilemez
 	\end{itemize}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\frametitle{Metadata}
 
 	\begin{itemize}
 		\item metadata yoksa, statik görüntüden gölge bulucular kullanılabilir
 	\end{itemize}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\frametitle {}
 
 	\includegraphics[width=1.0\textwidth]{img/fig1.jpg}
-}
+\end{frame}
 
 \section{Ground-Plane Normal and Shadow Constraints}
 
 \subsection{Metadata}
 
-\frame {
+\begin{frame}
 	\frametitle{Metadata}
 
 	\begin{itemize}
@@ -154,11 +152,11 @@ USA}
 			  değişimler), focal length, time
 		\item dünyayla ilgili kısıtları belirler
 	\end{itemize}
-}
+\end{frame}
 
 \subsection{World Constraints}
 
-\frame {
+\begin{frame}
 	\frametitle{World Constraints}
 
 	\begin{itemize}
@@ -171,21 +169,190 @@ USA}
 		\item kişinin yüksekliğiyle gölgesinin uzunluğu arasında geometrik
 		ilişki vardır
 	\end{itemize}
-}
+\end{frame}
 
-\frame {
+\begin{frame}
 	\includegraphics[width=0.8\textwidth]{img/fig2.jpg}
-}
+\end{frame}
+
+\begin{frame}
+	\frametitle{World Constraints}
+
+	\begin{itemize}
+		\item latitude, longitude ve time belliyken (metadata)
+		\item cite{reda03}'deki algoritma yardımıyla yer üzerindeki gözlemciyle
+			güneşin göreceli konumunu elde edilir
+		\item iki açı değeriyle tanımlanır: azimuth-$\alpha$, zenith-$\gamma$
+		\item kişinin yüksekliği $k$ ise gölgesi $l = \frac{k}{tan(\gamma - 90)}$
+		\item \label{eq:golge-olcekli}gölge uzunluğu azimuth-$\alpha$ açısıyla ölçeklenir:
+			$S = <l	cos(\alpha), l sin(\alpha), 0>$
+	\end{itemize}
+\end{frame}
 
 \subsection{Image Constraints}
 
+\begin{frame}[allowframebreaks]
+
+	\frametitle{Image Constraints}
+
+	\begin{itemize}
+		\item insan kısıtlamalarını devreye almadan önce dünya
+			koordinatlarından $\rightarrow$ görütü koord. dönüştürelim
+		\item burada metadata kullanılacak (ayrıntı için cite{hartley04})
+		\item önce uçağın: latitude, longitude koordinatlarını dünya koord.
+			dönüştür (bizde $X_w$=doğu, $Y_w$=kuzey)
+		\item sensör modelini oluştur: herhangi bir piksel-$p'=(x_i, y_i)$'in
+			dünya koordinatlarındaki karşılığı-$p=(X_w, Y_w, Z_w)$
+		\item dönüşüm yapısı:
+			\begin{equation}
+				\Pi_1 = T^a_{Z_w} \times T^e_{X_w} \times T^n_{Y_w} \times
+					R^y_{Z_w} \times R^p_{X_w} \times R^r_{Y_w} \times
+					R^s_{Z_\alpha} \times R^e_{X_\alpha} \times R^t_{Y_\alpha}
+					\label{eq:sensor-matrisi}
+			\end{equation}
+		\item burada $T^a_{Z_w}$, $T^e_{X_w}$ ve $T^n_{Y_w}$ uçak pozisyonunun
+			dünya koordinatlarına dönüşümü için-altitude, east, north.
+		\item $R^y_{Z_w}$, $R^p_{X_w}$ ve $R^r_{Y_w}$ uçağın dönme miktarı-yaw,
+			pitch, roll
+		\item $R^s_{Z_\alpha}$, $R^e_{X_\alpha}$ ve $R^t_{Y_\alpha}$ kameranın
+			dönme miktarı-scan, elevation, tilt
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+	\frametitle{Image Constraints: ray trace}
+
+	\begin{itemize}
+		\item 2d resim koordinatlarından-$p'=(x_i, y_i)$, 3d kamera koord.
+			dönüştür- $\hat{p}'=(x_i, y_i, -f)$
+		\item burada $f$ kameranın focal uznluğudur
+		\item Eşitlik \ref{eq:sensor-matrisi} uygulanır ve yeryüzeyine raytrace
+			yapılır
+			\begin{equation}
+				p = RayTrace(\Pi_1 \times \hat{p}')
+				\label{eq:ray-trace}
+			\end{equation}
+		\item ray tracing, ortam hakkında geometrik bilgi talep eder: her bir
+			piksel noktasındaki dünya yüksekliği gibi; bu ise DEM'den elde
+			edilir.
+		\item burada sahne planar olarak kabul edilmiş, ve yeryüzeyindeki
+			noktalar-$Z_w=0$ yansıtılmıştır.
+		\item herhangi bir piksel değeri-$p'=(x_i, y_i)$, raytracing ile
+			yeryüzeyi noktasına-$p=(X_w,Y_w,0)$ dönüştürülür.
+		\item sahnede yalnızca bir düzlem olduğundan, dört resim köşesine
+			ihtiyaç duyuyoruz
+		\item iki noktalar kümesi arasında Homography-$H_1$ hesaplanır:
+			$p = H_1 \times p'$
+		\item $H_1$, orijinal kareyi dikleştirecek (orthorectify) ve Kuzey
+			Yönüyle hizalayacak
+		\item Dikleştirme, resimden perspektif bozulmayı uzaklaştırır ve
+			resimdeki dünya açısını ölçmeyi mümkün kılar
+		\item dünya koordinatlarında tanımlı gölge vektörünü, resim
+			koordinatlarına yansıtmada $H_1^{-1}$ kullanırız
+
+			\begin{equation}
+				S' = S \times H_1^{-1}
+				\label{eq:diklestirme}
+			\end{equation}
+		\item buradaki $S$ (\ref{eq:golge-olcekli}) daha önceden verilmişti.
+
+		\begin{itemize}
+			\item kişinin yüksekliği $k$ ise, gölgesi
+				$l = \frac{k}{tan(\gamma - 90)}$, burada $\gamma$-zenith açı değeri,
+			\item gölge uzunluğu azimuth-$\alpha$ açısıyla ölçeklenir:
+				$S = <l	cos(\alpha), l sin(\alpha), 0>$
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]
+	\includegraphics[width=0.9\textwidth]{img/fig2.jpg}
+
+	\begin{scriptsize}
+		Fig 2.
+		Solda, sensör modeli $\Pi_1$, kamera koordinatlarından dünya koordinatlarına
+		haritalar (görüntüyle kamera koordinat dönüşümü basitliğinden ötürü
+		verilmedi). $X$, Doğu yönüne, $Y$, Kuzey yönüne, $Z$ dikey yöne işaret eder.
+		$S$ vektörü, yeryüzeyi boyunca gözlemciden güneşe işaret eder. kuzey yönüyle
+		güneş arasında kalan $\alpha$ azimuth açısıyla tanımlanır. $\gamma$ zentih
+		açısı, dikey yönle güneş arasındaki açıdır. İnsan yüksekliği $k$ ve gölge
+		uzunluğu $l$ olsun. Görüntü noktalarının dünya koordinatlarını bulmak için
+		dünyada görüntü düzlemini yerleştirdik ve ona doğru raytrace ettik (görüntü
+		düzleminden yeryüzeyi düzlemine yansıttık). Görüntü noktaları ve ona
+		karşılık gelen dünya üzeri koordinatlar arasında $H_1$ homography si
+		hesaplandı.
+
+		Sağda, yeryüzeyi düzlem normalinin orijinal resimdeki yansımasının nasıl
+		elde edileceğini gösterir. Daha düşük sensör modeli $\Pi_2$ kullanılarak,
+		kamera koordinatlarındaki noktaları yeryüzeyi üzerindeki düzleme haritalayan
+		diğer homography-$H_2$ elde edilir. $p_{c1}$ dünya noktasını $H_1$ ve $H_2$
+		kullanarak haritalamak, $p_{c1}'$ ve $p_{c2}'$ görüntü noktalarını verir.
+		$p_{c1}'$'den $p_{c2}'$'ye yönelen vektör, normal vektörün yansımasıdır.
+	\end{scriptsize}
+
+%	Gölge vektörü, homography (4.a)
+%	\includegraphics[width=0.8\textwidth]{img/fig4.jpg}
+\end{frame}
+
 \section{Human Detection}
 \subsection{Constraining the Search}
+
+\begin{frame}
+	\includegraphics[width=0.8\textwidth]{img/fig3.jpg}
+\end{frame}
+
 \subsection{Exploiting Object Shadow Relationship}
+
+\begin{frame}[allowframebreaks]
+	\includegraphics[width=0.8\textwidth]{img/fig4.jpg}
+
+	\begin{scriptsize}
+	Fig 4. (a) gölge blob haritası $M_{S'}$ (kırmızı), normal blob haritası
+	$M_{Z'}$
+
+Fig. 4. (a) shows shadow blob map MS (shown in red), and normal blob map MZ
+(shown in green), overlayed on the original image.
+
+Notice there are false detections at the bottom of the image.
+
+Yellow arrow is the projected sun vector S , the projected normal vector z is
+shown in green, and the ratio between the projected normal and shadow lengths is
+2.284
+
+(b) shows example candidates being refined.  A valid configu- ration of human
+and shadow blobs (top) results in an intersection of the rays, and is kept as a
+human candidate.
+
+An invalid configuration of blobs (bottom) results in the divergence of the
+rays, and is removed from the set of human candidates.
+
+(c) shows refined blob maps after each normal blob was related to its
+corresponding shadow blob.
+
+	\end{scriptsize}
+\end{frame}
+
 \subsection{Constraints without Metadata}
+
+\begin{frame}
+	\includegraphics[width=0.8\textwidth]{img/fig5.jpg}
+\end{frame}
+
 \subsection{Object Candidate Classification}
 
+\begin{frame}
+	\includegraphics[width=0.8\textwidth]{img/fig6.jpg}
+\end{frame}
+
 \section{Results}
+
+\begin{frame}
+	\includegraphics[width=0.8\textwidth]{img/fig7.jpg}
+\end{frame}
+
+\begin{frame}
+	\includegraphics[width=0.8\textwidth]{img/fig8.jpg}
+\end{frame}
 
 \section{Conclusions}
 
