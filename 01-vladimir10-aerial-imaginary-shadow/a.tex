@@ -17,7 +17,7 @@ USA}
 
 \frame{\titlepage}
 
-\section[İskelet]{}
+\section[İçindekiler]{}
 \frame{\tableofcontents}
 
 \begin{frame}
@@ -86,10 +86,6 @@ USA}
 \end{frame}
 
 \begin{frame}
-	\includegraphics[width=1.0\textwidth]{img/fig8.jpg}
-\end{frame}
-
-\begin{frame}
 	\frametitle {İlgili Makaleler}
 
 	cite{miller07}
@@ -129,16 +125,25 @@ USA}
 
 	\begin{itemize}
 		\item metadata yoksa, statik görüntüden gölge bulucular kullanılabilir
+		\item fakat standart gölge bulucular (cite{xu06}, cite{finlayson06})
+			gerçek veri üzerindeki başarımı
+		\textbf{kötüdür}.
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-	\frametitle {}
+	\frametitle{Metadata: gölge bulucu}
 
 	\includegraphics[width=1.0\textwidth]{img/fig1.jpg}
+
+	Fig 1. databaseden bir kare, içerisinde insanlar var. İnsanlar yalnızca $24
+	\times 14$ piksel boyutundadır, ve arkaplan ayırt etmek güçtür. cite{xu06}
+	kullanılarak sabit görüntüde gölge algılama kullanıldığında, gövdeye ait
+	pikseller ve arkaplanın büyük bir bölümü, gölgeye ait olarak yanlış
+	etiketlenmiştir.
 \end{frame}
 
-\section{Ground-Plane Normal and Shadow Constraints}
+\section{Yeryüzeyi Normali ve Gölge Kısıtlamaları}
 
 \subsection{Metadata}
 
@@ -154,10 +159,10 @@ USA}
 	\end{itemize}
 \end{frame}
 
-\subsection{World Constraints}
+\subsection{Dünya Kısıtlamaları}
 
 \begin{frame}
-	\frametitle{World Constraints}
+	\frametitle{Dünya Kısıtlamaları}
 
 	\begin{itemize}
 		\item nesne algılama ve gözetim senaryolarında genelde gürültü olarak görülür
@@ -172,11 +177,15 @@ USA}
 \end{frame}
 
 \begin{frame}
+	\frametitle{Sensör Modeli}
+
 	\includegraphics[width=0.8\textwidth]{img/fig2.jpg}
+
+	Fig 2. \ref{fig:sensor-model}
 \end{frame}
 
 \begin{frame}
-	\frametitle{World Constraints}
+	\frametitle{Dünya Kısıtlamaları}
 
 	\begin{itemize}
 		\item latitude, longitude ve time belliyken (metadata)
@@ -189,11 +198,10 @@ USA}
 	\end{itemize}
 \end{frame}
 
-\subsection{Image Constraints}
+\subsection{Resim Kısıtlamaları}
 
 \begin{frame}[allowframebreaks]
-
-	\frametitle{Image Constraints}
+	\frametitle{Resim Kısıtlamaları}
 
 	\begin{itemize}
 		\item insan kısıtlamalarını devreye almadan önce dünya
@@ -220,7 +228,7 @@ USA}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
-	\frametitle{Image Constraints: ray trace}
+	\frametitle{Resim Kısıtlamaları: raytrace}
 
 	\begin{itemize}
 		\item 2d resim koordinatlarından-$p'=(x_i, y_i)$, 3d kamera koord.
@@ -266,7 +274,9 @@ USA}
 \end{frame}
 
 \begin{frame}[allowframebreaks]
-	\includegraphics[width=0.9\textwidth]{img/fig2.jpg}
+	\frametitle{Sensör Modeli}
+
+	\includegraphics[width=0.9\textwidth]{img/fig2.jpg}\label{fig:sensor-model}
 
 	\begin{scriptsize}
 		Fig 2.
@@ -289,71 +299,167 @@ USA}
 		kullanarak haritalamak, $p_{c1}'$ ve $p_{c2}'$ görüntü noktalarını verir.
 		$p_{c1}'$'den $p_{c2}'$'ye yönelen vektör, normal vektörün yansımasıdır.
 	\end{scriptsize}
-
-%	Gölge vektörü, homography (4.a)
-%	\includegraphics[width=0.8\textwidth]{img/fig4.jpg}
 \end{frame}
 
-\section{Human Detection}
-\subsection{Constraining the Search}
+\section{İnsan Algılama}
+\subsection{Kısıtlamalı Arama}
 
 \begin{frame}
-	\includegraphics[width=0.8\textwidth]{img/fig3.jpg}
+	\frametitle{Başlangıç Adayları}
+
+	\includegraphics[width=0.95\textwidth]{img/fig3.jpg}\label{fig:baslangic-adaylari}
+
+	Fig 3. başlangıç insan adayları kümesini elde etmek için uygulanan resim
+	kısıtlamaları diagramını gösterir.
+
+	\begin{itemize}
+		\item metadatadan yönler (vücut ve gölge yönü) belli olduğuna göre
+		\item ilgili yönlerde gradyan hesapla
+	\end{itemize}
 \end{frame}
 
-\subsection{Exploiting Object Shadow Relationship}
+\subsection{Nesne Gölge İlişkisinden Yararlanma}
 
 \begin{frame}[allowframebreaks]
-	\includegraphics[width=0.8\textwidth]{img/fig4.jpg}
+	\frametitle{Aday eleme}
+
+	\includegraphics[width=0.8\textwidth]{img/fig4.jpg}\label{fig:aday-eleme}
 
 	\begin{scriptsize}
 	Fig 4. (a) gölge blob haritası $M_{S'}$ (kırmızı), normal blob haritası
-	$M_{Z'}$
+	$M_{Z'}$ (yeşil). Resmin alt bölümünde false detection vardır. Sarı ok,
+	yansıtılan günşe vektörü-$S'$ yansıtılan normal vektörü-$z'$ yeşil
+	renklidir ve yansıtılan normal ve gölge uzunluğu arasındaki oran
+	$2.284$'dir.
 
-Fig. 4. (a) shows shadow blob map MS (shown in red), and normal blob map MZ
-(shown in green), overlayed on the original image.
+	(b) arındırılmış adayları gösteren bir örnekdir. Üsttekinde insan/gövde ve
+	gölge blobları geçerli bir konfigürasyondadır ve hüzmeleri kesişmektedir, ve
+	geçerli bir insan adayı olarak korunur. Alttakindeyse blobların
+	konfigürasyonu geçersizdir, hüzmeler saçılmıştır (kesişim yok), ve insan
+	adayları kümesinden çıkarılır.
 
-Notice there are false detections at the bottom of the image.
-
-Yellow arrow is the projected sun vector S , the projected normal vector z is
-shown in green, and the ratio between the projected normal and shadow lengths is
-2.284
-
-(b) shows example candidates being refined.  A valid configu- ration of human
-and shadow blobs (top) results in an intersection of the rays, and is kept as a
-human candidate.
-
-An invalid configuration of blobs (bottom) results in the divergence of the
-rays, and is removed from the set of human candidates.
-
-(c) shows refined blob maps after each normal blob was related to its
-corresponding shadow blob.
+	(c) her bir normal/gövde blobu onunla gölge blobunun ilişkilendirilmesi
+	sonrasında korunmuş blob haritasını gösterir.
 
 	\end{scriptsize}
 \end{frame}
 
-\subsection{Constraints without Metadata}
+\subsection{Metada olmaksızın Kısıtlama}
 
 \begin{frame}
-	\includegraphics[width=0.8\textwidth]{img/fig5.jpg}
+	\frametitle{Metadata yokken}
+
+	\includegraphics[width=0.95\textwidth]{img/fig5.jpg}\label{fig:optimal-shadow-orientation}
+
+	\begin{scriptsize}
+		Fig 5. Metada yokken, verilen resimdeki en uygun gölge yönelimini bulma
+		yöntemi ayrıntılarını gösterir. Üst satır, farklı gölge yönlenmeleri için
+		elde edilen insan adayı tepkilerini gösterir. Daha sonra, insan adayı,
+		yönelim vektörüyle tanımlanır. Optimal yönelim-$\hat{\Theta}$, tüm insan
+		adayları arasında en büyük ardışık örtüşmeyen yönelim dizisinin
+		ortalamasıdır. Sağdaki resim, metadata olmaksızın, $35^o$ olarak otomatik
+		tahmin edilmiş gölge yönelimi için korunmuş insan adayı bloblarını gösterir.
+		Bu kare için metadata'dan türetilen $\Theta$ değeri, $46.7^o$'dir. Metadata
+		kullanılarak algılanan bloblar ise Fig 4.'de verilmiştir
+		(\ref{fig:aday-eleme}).
+	\end{scriptsize}
+
+	\begin{itemize}
+		\item diğer gölge bulucular ve bizim yaklaşım denenebilir
+	\end{itemize}
 \end{frame}
 
-\subsection{Object Candidate Classification}
+\subsection{Nesne Adaylarını Sınıflama}
 
 \begin{frame}
-	\includegraphics[width=0.8\textwidth]{img/fig6.jpg}
+	\frametitle{Sınıflama}
+
+	\includegraphics[width=0.95\textwidth]{img/fig6.jpg}\label{fig:classification}
+
+	Fig 6. Nesne adaylarının sınıflandırılması. Dört wavelet filtresi (LL, LH,
+	HL, HH) orijinal resmin ölçekle versiyonunu üretir. Elde edilen çıkışi
+	vektöre dönüştürülür, normalize edilir ve öznitelik vektörünü biçimlendirmek
+	üzere ardı ardına eklenir. Bu öznitelik vektörleri SVM yardımıyla
+	sınıflandırılır.
+
+	\begin{itemize}
+		\item öznitelik kısmı iyileştirilebilir
+		\item @ilke'ye verdiğim Türk bir hocanın kontur yaklaşımı kullanılabilir
+	\end{itemize}
 \end{frame}
 
-\section{Results}
+\section{Sonuçlar}
 
 \begin{frame}
-	\includegraphics[width=0.8\textwidth]{img/fig7.jpg}
+	\frametitle{ROC: karşılaştırma}
+
+	\includegraphics[width=0.8\textwidth]{img/fig7.jpg}\label{fig:ROC}
+
+	\begin{scriptsize}
+		Fig 7. ardışıllık 1 (çizgi-nokta), 2 (nokta) ve 3 (çizgi) için SVM güven ROC
+		eğrisidir. Önerilen yöntem (gölge, nesne-gölge ilişki koruma ve merkezi
+		konumlandırma temelli) kırmızı renkle gösterilmiştir. Sarı eğri, nesne-gölge
+		ilişki koruma veya merkezi konumlandırma kullanılmadığında elde edilen
+		eğridir. Standart tam kare algılayıcı (HOG) mavi renkle gösterilmiştir.
+		Yeşil renk, cite{xiao07}'dekine benzer kayıtlanma, hareket, algılama ve
+		izlemeyle elde edilen blob sınıflandırma sonuçlarıdır. Siyah eğri,
+		cite{miller07}'in modifiye edilmiş gerçeklemesidir (Harris köşe bulucu
+		kullanır).
+	\end{scriptsize}
 \end{frame}
 
 \begin{frame}
-	\includegraphics[width=0.8\textwidth]{img/fig8.jpg}
+	\frametitle{ROC: uzayı}
+
+	\begin{columns}
+		\column{0.5\textwidth}
+			\includegraphics[height=0.8\textheight]{img/ROC_space.png}\label{fig:ROC-space}
+		\column{0.5\textwidth}
+			\begin{itemize}
+				\item ROC (receiver operating characteristic) eğrisi,
+					sensitivity (duyarlılık; True Pozitif Oranı) x False Pozitif
+					Oranı (1 - specificity/özgüllük veya 1 - True Negatif
+					Oranı); ayrım eşiğinin değişimiyle şekillenir.
+
+				\item Bazen de ROC, TP/P (=TPR) X FP/N (=FPR).
+			\end{itemize}
+	\end{columns}
 \end{frame}
 
-\section{Conclusions}
+\begin{frame}
+	\frametitle{ROC: tanımlar}
+
+	\begin{columns}
+		\column{0.65\textwidth}
+			\includegraphics[width=1.0\textwidth]{img/ROC.png}\label{fig:ROC-def}
+		\column{0.35\textwidth}
+			\begin{itemize}
+				\item TP / TN: Doğru sınıflandırma
+				\item FP / FN: Hatalı sınıflandırma
+				\item eksenler x:FP, y:TP; hatalı X doğru sınıflandırma
+				\item mükemmel sınıflandırma sol-üst köşede olur
+			\end{itemize}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Karşılaştırmalı Sonuçlar}
+
+	\includegraphics[width=0.8\textwidth]{img/fig8.jpg}\label{fig:compare}
+
+	Fig 8.(a), (b) ve (c), hareket algılama (üst satır) ile önerilen yöntemi
+	(alt satır) karşılaştırır. (a) İnsan, durağandır ve hareket algılayıcı
+	arafından algılanamamıştır. (b) Hareketli blob, gölge içerir; blobun merkezi
+	kişinin ki değildir. (c) iki hareketli blob birbirine girmiş; gölge
+	örtüşmüş, merkez herhangi birine ait değil. Önerilen yöntem insan adaylarını
+	doğru bir şekilde algıladı ve konumladı (yeşil). (d) ve (e) geometri
+	kısıtlamalı insan algılama ve tam kare HOG algılayıcıyı karşılaştırır.
+	Sınıflandırıcı yardımıyla adaylıktan çıkarılanlar mor, insan olarak
+	işaretlenenler ise siyah olarak gösterilmiştir. Kısıtlamasız tam kare
+	algılama (e) çok sayıda false pozitif üretmiştir.
+
+\end{frame}
+
+\section{Öneri}
 
 \end{document}
