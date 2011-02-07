@@ -285,6 +285,29 @@ USA}
 				\Pi_2 = (T^a_{Z_w} - [I|k]) \times T^e_{X_w} \times T^n_{Y_w}
 					\label{eq:ikinci-sensor-matrisi}
 			\end{equation}
+
+		\item $\Pi_2$ sensör modelini kullanarak, $H_1$'i elde etmede kullanılan
+		aynı süreçle ikinci homography-$H_2$ elde edilir. İki homographiye
+		sahibiz: $H_1$ görüntüdeki noktaları yeryüzeyi düzlemine haritalarken,
+		$H_2$ görüntüdeki noktaları, yeryüzeyi düzleminden tam olarak $k$ birim
+		yukarıda paralel sanal düzleme haritalar. Resmin merkez noktasını
+		$p_{c1}' = (x_c, y_c)$ seçersek ve yeryüzeyindeki koordinatları
+		$p_{c1} = H_1 \times p_c'$ olarak elde edilir. Orjinal resme $H_2$'yi
+		kullanarak geri haritalayabiliriz, $p_{c2}' = H_2^{-1} \times p_c$.
+		Bu durumda yansıtılmış normal,
+
+			\begin{equation}
+				Z' = p_{c2}' - p_{c1}'
+				\label{eq:yansitilmis-normal}
+			\end{equation}
+
+		\item Yansıtılmış gölge uzunluğu ve yansıtılmış kişi yüksekliği
+		arasındaki oranı şöyle hesaplayabiliriz,
+
+			\begin{equation}
+				\eta = \frac{|S'|}{|Z'|}
+				\label{eq:yansitilmis-golge-yukseklik-orani}
+			\end{equation}
 	\end{itemize}
 \end{frame}
 
@@ -319,8 +342,16 @@ USA}
 \section{İnsan Algılama}
 \subsection{Kısıtlamalı Arama}
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
 	\frametitle{Başlangıç Adayları}
+
+	Tüm kareyi taramanın önüne geçmek için, insan algılama sürecindeki ilk adım,
+	arama uzayını potansiyel insan adaylarıyla kısıtlamaktır. Arama uzayı, gölge
+	yönünde ve normal yönünde yönelmiş bloblar kümesiyle tanımlanır. Böyle
+	yapmak için, önceki bölümde türetilen dünya kısıtlamalarının resim
+	yansımasını kullanırız: yansıtılmış yeryüzeyi düzlemi normali (yönü)-$Z'$
+	yansıtılmış gölge yönü-$S'$ ve yansıtılmış insan yüksekliği yansıtılmış
+	gölge uzunluğu oranı-$\eta$.
 
 	\includegraphics[width=0.95\textwidth]{img/fig3.jpg}\label{fig:baslangic-adaylari}
 
@@ -331,12 +362,62 @@ USA}
 		\item metadatadan yönler (vücut ve gölge yönü) belli olduğuna göre
 		\item ilgili yönlerde gradyan hesapla
 	\end{itemize}
+
+ 	$I$ karesi verildiğinde,2D Gaussian filtreyi uygulayarak gölge yönünde
+	yönelimli gradyanı hesaplarız,
+
+   \begin{equation}
+		G(x,y) = os(\theta) 2xe^{-\frac{x^2+y^2}{\sigma^2}} + sin(\theta)
+		2ye^{-\frac{x^2+y^2}{\sigma^2}}
+		\label{eq:gauss}
+   \end{equation}
+
+	$\theta$ is the angle between the vector of interest and the x axis,and take
+	its absolute value. To further suppress gradient not oriented in the
+	direction of the shadow vector we perform structural erosion along a line in
+	the direction of the shadow orientation:
+
+	\begin{equation}
+		\nabla I_{S'}| = erode(\nabla I, S')
+		\label{eq:shadow-orientation}
+	\end{equation}
+
+	\begin{itemize}
+		\item bizim vücut-gölge ayrıcıyı bu şekilde iyileştirebiliriz
+	\end{itemize}
 \end{frame}
 
 \subsection{Nesne Gölge İlişkisinden Yararlanma}
 
 \begin{frame}[allowframebreaks]
 	\frametitle{Aday eleme}
+
+	We obtain $\nabla I_{Z'}$ using the same process. Next, we smooth the
+	resulting gradient images with an elliptical averaging filter whose major
+	axis is oriented along the direction of interest:
+
+	\begin{equation}
+		I_{S'}^B = |\nabla I_{S'}| * G_{S'}
+		\label{eq:smooth-images}
+	\end{equation}
+
+	% where $B_{S'}$ is an elliptical averaging filter, whose major axis is oriented
+	% along the shadow vector direction, this fills in the blobs. We obtain
+	% $I_{Z'}^B$	using $G_{Z'}$ . Next, we apply an adaptive threshold to each
+	% pixel to obtain shadow and normal blob maps.
+
+	% \begin{equation}
+	% 	\[M_{S'} = \left{
+	% 		\begin{array}{l l}
+	% 			1 & \quad \mbox{if I_{S'}^B > t \dot mean(I_{S'}^G)}\\
+	% 			0 & \quad \mbox{otherwise}\\ \end{array} \right. \]
+	% \end{equation}
+
+	% See Figure 4 for resulting blob maps overlayed on the original image. We
+	% obtain $M_{Z'}$ using the same method. From the binary blob maps we obtain a set
+	% of shadow and object candidate blobs using connected components. Notice that
+	% a number of false shadow and object blobs were initially detected, and later
+	% removed.
 
 	\includegraphics[width=0.8\textwidth]{img/fig4.jpg}\label{fig:aday-eleme}
 
